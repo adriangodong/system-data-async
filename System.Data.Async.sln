@@ -3,8 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Data.Async", "System.Data.Async\System.Data.Async.csproj", "{2010AD2A-A7A9-4807-B0BE-AE1C349158CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{A50039A8-F7AD-49F9-B252-1D124506E01F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moq", "Samples\Moq\Moq.csproj", "{BB11D708-37B2-4C0C-ACF8-FC0790822361}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2010AD2A-A7A9-4807-B0BE-AE1C349158CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2010AD2A-A7A9-4807-B0BE-AE1C349158CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2010AD2A-A7A9-4807-B0BE-AE1C349158CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2010AD2A-A7A9-4807-B0BE-AE1C349158CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB11D708-37B2-4C0C-ACF8-FC0790822361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB11D708-37B2-4C0C-ACF8-FC0790822361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB11D708-37B2-4C0C-ACF8-FC0790822361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB11D708-37B2-4C0C-ACF8-FC0790822361}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BB11D708-37B2-4C0C-ACF8-FC0790822361} = {A50039A8-F7AD-49F9-B252-1D124506E01F}
 	EndGlobalSection
 EndGlobal
