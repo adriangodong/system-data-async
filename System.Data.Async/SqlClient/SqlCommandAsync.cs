@@ -1,12 +1,15 @@
-﻿using System.Data.Common;
+﻿using System.Data.Async.Common;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace System.Data.Async
+namespace System.Data.Async.SqlClient
 {
     public class SqlCommandAsync : DbCommandAsync
     {
 
-        private readonly SqlCommand sqlCommand;
+        public SqlCommand SqlCommand { get; }
 
         public SqlCommandAsync()
             : this(new SqlCommand())
@@ -30,81 +33,88 @@ namespace System.Data.Async
 
         public SqlCommandAsync(SqlCommand sqlCommand)
         {
-            this.sqlCommand = sqlCommand;
+            SqlCommand = sqlCommand;
+        }
+
+        protected override DbDataReaderAsync ExecuteDbDataReaderAsync(CommandBehavior behavior)
+        {
+            var dataReader = SqlCommand.ExecuteReader(behavior);
+
+            return new SqlDataReaderAsync(dataReader);
         }
 
         public override void Cancel()
         {
-            sqlCommand.Cancel();
+            SqlCommand.Cancel();
         }
 
         public override int ExecuteNonQuery()
         {
-            return sqlCommand.ExecuteNonQuery();
+            return SqlCommand.ExecuteNonQuery();
         }
 
         public override object ExecuteScalar()
         {
-            return sqlCommand.ExecuteScalar();
+            return SqlCommand.ExecuteScalar();
         }
 
         public override void Prepare()
         {
-            sqlCommand.Prepare();
+            SqlCommand.Prepare();
         }
 
         public override string CommandText
         {
-            get => sqlCommand.CommandText;
-            set => sqlCommand.CommandText = value;
+            get => SqlCommand.CommandText;
+            set => SqlCommand.CommandText = value;
         }
 
         public override int CommandTimeout
         {
-            get => sqlCommand.CommandTimeout;
-            set => sqlCommand.CommandTimeout = value;
+            get => SqlCommand.CommandTimeout;
+            set => SqlCommand.CommandTimeout = value;
         }
 
         public override CommandType CommandType
         {
-            get => sqlCommand.CommandType;
-            set => sqlCommand.CommandType = value;
+            get => SqlCommand.CommandType;
+            set => SqlCommand.CommandType = value;
         }
 
         public override UpdateRowSource UpdatedRowSource
         {
-            get => sqlCommand.UpdatedRowSource;
-            set => sqlCommand.UpdatedRowSource = value;
+            get => SqlCommand.UpdatedRowSource;
+            set => SqlCommand.UpdatedRowSource = value;
         }
 
         protected override DbConnection DbConnection
         {
-            get => sqlCommand.Connection;
-            set => sqlCommand.Connection = (SqlConnection)value;
+            get => SqlCommand.Connection;
+            set => SqlCommand.Connection = (SqlConnection)value;
         }
 
-        protected override DbParameterCollection DbParameterCollection => sqlCommand.Parameters;
+        protected override DbParameterCollection DbParameterCollection => SqlCommand.Parameters;
 
         protected override DbTransaction DbTransaction
         {
-            get => sqlCommand.Transaction;
-            set => sqlCommand.Transaction = (SqlTransaction)value;
+            get => SqlCommand.Transaction;
+            set => SqlCommand.Transaction = (SqlTransaction)value;
         }
 
         public override bool DesignTimeVisible
         {
-            get => sqlCommand.DesignTimeVisible;
-            set => sqlCommand.DesignTimeVisible = value;
+            get => SqlCommand.DesignTimeVisible;
+            set => SqlCommand.DesignTimeVisible = value;
         }
 
         protected override DbParameter CreateDbParameter()
         {
-            return sqlCommand.CreateParameter();
+            return SqlCommand.CreateParameter();
         }
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            return sqlCommand.ExecuteReader(behavior);
+            return SqlCommand.ExecuteReader(behavior);
         }
     }
 }

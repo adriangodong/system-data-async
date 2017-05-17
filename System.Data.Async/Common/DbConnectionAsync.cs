@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace System.Data.Async
+namespace System.Data.Async.Common
 {
     public abstract class DbConnectionAsync : DbConnection, IDbConnectionAsync
     {

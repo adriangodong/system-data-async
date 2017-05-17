@@ -65,5 +65,40 @@ namespace Moq
             // Assert
             mockCommand.Verify(mock => mock.ExecuteScalarAsync(), Times.Once);
         }
+
+        [TestMethod]
+        public async Task CreateCommand_ExecuteReader_ReadAsync()
+        {
+            // Arrange
+            var mockConnection = new Mock<IDbConnectionAsync>();
+            var mockCommand = new Mock<IDbCommandAsync>();
+            var mockDataReader = new Mock<IDataReaderAsync>();
+            mockConnection.Setup(mock => mock.CreateCommand()).Returns(mockCommand.Object);
+            mockCommand.Setup(mock => mock.ExecuteReader()).Returns(mockDataReader.Object);
+
+            // Act
+            await mockConnection.Object.CreateCommand().ExecuteReader().ReadAsync();
+
+            // Assert
+            mockDataReader.Verify(mock => mock.ReadAsync(), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task CreateCommand_ExecuteReaderAsync_ReadAsync()
+        {
+            // Arrange
+            var mockConnection = new Mock<IDbConnectionAsync>();
+            var mockCommand = new Mock<IDbCommandAsync>();
+            var mockDataReader = new Mock<IDataReaderAsync>();
+            mockConnection.Setup(mock => mock.CreateCommand()).Returns(mockCommand.Object);
+            mockCommand.Setup(mock => mock.ExecuteReaderAsync()).ReturnsAsync(mockDataReader.Object);
+
+            // Act
+            await (await mockConnection.Object.CreateCommand().ExecuteReaderAsync()).ReadAsync();
+
+            // Assert
+            mockDataReader.Verify(mock => mock.ReadAsync(), Times.Once);
+        }
+
     }
 }

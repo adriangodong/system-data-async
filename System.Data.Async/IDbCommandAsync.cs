@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
 namespace System.Data.Async
@@ -8,10 +7,12 @@ namespace System.Data.Async
     {
         Task<int> ExecuteNonQueryAsync();
         Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken);
-        Task<DbDataReader> ExecuteReaderAsync();
-        Task<DbDataReader> ExecuteReaderAsync(CommandBehavior behavior);
-        Task<DbDataReader> ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken);
-        Task<DbDataReader> ExecuteReaderAsync(CancellationToken cancellationToken);
+        new IDataReaderAsync ExecuteReader();
+        new IDataReaderAsync ExecuteReader(CommandBehavior behavior);
+        Task<IDataReaderAsync> ExecuteReaderAsync();
+        Task<IDataReaderAsync> ExecuteReaderAsync(CommandBehavior behavior);
+        Task<IDataReaderAsync> ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken);
+        Task<IDataReaderAsync> ExecuteReaderAsync(CancellationToken cancellationToken);
         Task<object> ExecuteScalarAsync();
         Task<object> ExecuteScalarAsync(CancellationToken cancellationToken);
     }

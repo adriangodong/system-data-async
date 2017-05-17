@@ -1,7 +1,8 @@
-﻿using System.Data.Common;
+﻿using System.Data.Async.Common;
+using System.Data.Common;
 using System.Data.SqlClient;
 
-namespace System.Data.Async
+namespace System.Data.Async.SqlClient
 {
     public class SqlConnectionAsync : DbConnectionAsync
     {
