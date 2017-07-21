@@ -1,0 +1,19 @@
+version: '{build}'
+image: Visual Studio 2017
+configuration: Release
+before_build:
+- cmd: dotnet restore
+build:
+  project: System.Data.Async.sln
+  verbosity: minimal
+test_script:
+- cmd: dotnet test Samples/Moq/Moq.csproj
+artifacts:
+- path: '**/*.nupkg'
+  name: Nuget Packages
+deploy:
+- provider: NuGet
+  api_key:
+    secure: 3dh7pjPch1zd1E5C55zjjSUs1qnF6vDVovOY0TjVKit9G/5mRqEUOnBz2cJ6Sz+m
+  on:
+    branch: master

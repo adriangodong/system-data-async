@@ -1,7 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;net47</TargetFrameworks>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Title>System.Data.Async</Title>
+    <Description>Async interfaces and adapters for System.Data</Description>
+    <Authors>adrian</Authors>
+    <PackageTags>system;data;async</PackageTags>
+    <PackageProjectUrl>https://github.com/adriangodong/system-data-async</PackageProjectUrl>
+    <AssemblyName>System.Data.Async</AssemblyName>
+    <PackageId>System.Data.Async</PackageId>
+    <IncludeSymbols>True</IncludeSymbols>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
