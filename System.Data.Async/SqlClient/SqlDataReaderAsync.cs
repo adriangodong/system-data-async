@@ -148,5 +148,10 @@ namespace System.Data.Async.SqlClient
             return SqlDataReader.GetEnumerator();
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            SqlDataReader.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }
