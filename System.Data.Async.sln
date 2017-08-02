@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Data.Async", "System.Data.Async\System.Data.Async.csproj", "{2010AD2A-A7A9-4807-B0BE-AE1C349158CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Data.Async", "System.Data.Async\System.Data.Async.csproj", "{2010AD2A-A7A9-4807-B0BE-AE1C349158CD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{A50039A8-F7AD-49F9-B252-1D124506E01F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moq", "Samples\Moq\Moq.csproj", "{BB11D708-37B2-4C0C-ACF8-FC0790822361}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Moq", "Samples\Moq\Moq.csproj", "{BB11D708-37B2-4C0C-ACF8-FC0790822361}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalDb", "Samples\LocalDb\LocalDb.csproj", "{D1B3EDCA-DEA2-4125-96EE-5EFDD54CCAF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,11 +25,16 @@ Global
 		{BB11D708-37B2-4C0C-ACF8-FC0790822361}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB11D708-37B2-4C0C-ACF8-FC0790822361}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB11D708-37B2-4C0C-ACF8-FC0790822361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1B3EDCA-DEA2-4125-96EE-5EFDD54CCAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1B3EDCA-DEA2-4125-96EE-5EFDD54CCAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1B3EDCA-DEA2-4125-96EE-5EFDD54CCAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1B3EDCA-DEA2-4125-96EE-5EFDD54CCAF1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{BB11D708-37B2-4C0C-ACF8-FC0790822361} = {A50039A8-F7AD-49F9-B252-1D124506E01F}
+		{D1B3EDCA-DEA2-4125-96EE-5EFDD54CCAF1} = {A50039A8-F7AD-49F9-B252-1D124506E01F}
 	EndGlobalSection
 EndGlobal
