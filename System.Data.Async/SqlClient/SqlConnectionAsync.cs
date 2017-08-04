@@ -6,6 +6,7 @@ namespace System.Data.Async.SqlClient
 {
     public class SqlConnectionAsync : DbConnectionAsync
     {
+
         public SqlConnection SqlConnection { get; }
 
         public SqlConnectionAsync()
@@ -71,6 +72,12 @@ namespace System.Data.Async.SqlClient
         public override string DataSource => SqlConnection.DataSource;
 
         public override string ServerVersion => SqlConnection.ServerVersion;
+
+        protected override void Dispose(bool disposing)
+        {
+            SqlConnection.Dispose();
+            base.Dispose(disposing);
+        }
 
     }
 }
