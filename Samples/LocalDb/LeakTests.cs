@@ -49,5 +49,28 @@ namespace LocalDb
             service.Dispose();
         }
 
+        [TestMethod]
+        public async Task Using_ExecuteNonQueryAsync_LeakTest()
+        {
+            var service = new LocalDbService();
+
+            for (var i = 0; i < 1000; i++)
+            {
+                using (var connection = service.GetConnection())
+                {
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "SELECT 1";
+                        command.CommandType = CommandType.Text;
+
+                        await connection.OpenAsync();
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+            }
+
+            service.Dispose();
+        }
+
     }
 }

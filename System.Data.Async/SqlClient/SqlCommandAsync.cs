@@ -116,5 +116,12 @@ namespace System.Data.Async.SqlClient
         {
             return SqlCommand.ExecuteReader(behavior);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            SqlCommand.Dispose();
+            base.Dispose(disposing);
+        }
+
     }
 }
