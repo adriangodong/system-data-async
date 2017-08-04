@@ -1,8 +1,16 @@
-version: '{build}'
+version: '1.0.{build}'
+pull_requests:
+  do_not_increment_build_number: true
+skip_branch_with_pr: true
 image: Visual Studio 2017
 configuration: Release
 before_build:
 - cmd: dotnet restore
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
 build:
   project: System.Data.Async.sln
   verbosity: minimal
