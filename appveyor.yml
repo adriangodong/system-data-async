@@ -7,7 +7,10 @@ build:
   project: System.Data.Async.sln
   verbosity: minimal
 test_script:
-- cmd: dotnet test Samples/Moq/Moq.csproj
+- cmd: >-
+    dotnet test Samples/Moq/Moq.csproj
+
+    dotnet test Samples/LocalDb/LocalDb.csproj
 artifacts:
 - path: '**/*.nupkg'
   name: Nuget Packages
