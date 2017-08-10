@@ -27,7 +27,7 @@ namespace System.Data.Async.SqlClient
         protected override DbCommandAsync CreateDbCommandAsync()
         {
             var command = SqlConnection.CreateCommand();
-            var asyncCommand = new SqlCommandAsync(command);
+            var asyncCommand = new SqlCommandAsync(command, this);
             return asyncCommand;
         }
 
