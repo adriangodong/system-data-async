@@ -1,17 +1,21 @@
 ﻿using System.Collections;
 using System.Data.Async.Common;
 using System.Data.SqlClient;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace System.Data.Async.SqlClient
 {
     public class SqlDataReaderAsync : DbDataReaderAsync
     {
 
-        public SqlDataReader SqlDataReader { get; }
+        private SqlDataReader SqlDataReader { get; }
+        private SqlCommandAsync SqlCommandAsync { get; }
 
-        public SqlDataReaderAsync(SqlDataReader sqlDataReader)
+        public SqlDataReaderAsync(SqlDataReader sqlDataReader, SqlCommandAsync sqlCommandAsync)
         {
             SqlDataReader = sqlDataReader;
+            SqlCommandAsync = sqlCommandAsync;
         }
 
         public override bool GetBoolean(int ordinal)
@@ -141,6 +145,11 @@ namespace System.Data.Async.SqlClient
             return SqlDataReader.Read();
         }
 
+        public override Task<bool> ReadAsync(CancellationToken cancellationToken)
+        {
+            return SqlDataReader.ReadAsync(cancellationToken);
+        }
+
         public override int Depth => SqlDataReader.Depth;
 
         public override IEnumerator GetEnumerator()
@@ -152,6 +161,8 @@ namespace System.Data.Async.SqlClient
         {
             SqlDataReader.Dispose();
             base.Dispose(disposing);
+            SqlCommandAsync.Dispose();
         }
+
     }
 }

@@ -1,46 +1,46 @@
 ﻿using System.Data.Async.Common;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace System.Data.Async.SqlClient
 {
     public class SqlCommandAsync : DbCommandAsync
     {
 
-        public SqlCommand SqlCommand { get; }
+        private SqlCommand SqlCommand { get; }
+        private SqlConnectionAsync SqlConnectionAsync { get; }
 
         public SqlCommandAsync()
-            : this(new SqlCommand())
+            : this(new SqlCommand(), null)
         {
         }
 
         public SqlCommandAsync(string cmdText)
-            : this(new SqlCommand(cmdText))
+            : this(new SqlCommand(cmdText), null)
         {
         }
 
         public SqlCommandAsync(string cmdText, SqlConnectionAsync connection)
-            : this(new SqlCommand(cmdText, connection.SqlConnection))
+            : this(new SqlCommand(cmdText, connection.SqlConnection), connection)
         {
         }
 
         public SqlCommandAsync(string cmdText, SqlConnectionAsync connection, SqlTransaction transaction)
-            : this(new SqlCommand(cmdText, connection.SqlConnection, transaction))
+            : this(new SqlCommand(cmdText, connection.SqlConnection, transaction), connection)
         {
         }
 
-        public SqlCommandAsync(SqlCommand sqlCommand)
+        public SqlCommandAsync(SqlCommand sqlCommand, SqlConnectionAsync sqlConnectionAsync)
         {
             SqlCommand = sqlCommand;
+            SqlConnectionAsync = sqlConnectionAsync;
         }
 
         protected override DbDataReaderAsync ExecuteDbDataReaderAsync(CommandBehavior behavior)
         {
             var dataReader = SqlCommand.ExecuteReader(behavior);
 
-            return new SqlDataReaderAsync(dataReader);
+            return new SqlDataReaderAsync(dataReader, this);
         }
 
         public override void Cancel()
@@ -121,6 +121,7 @@ namespace System.Data.Async.SqlClient
         {
             SqlCommand.Dispose();
             base.Dispose(disposing);
+            SqlConnectionAsync.Dispose();
         }
 
     }
