@@ -161,6 +161,10 @@ namespace System.Data.Async.SqlClient
         {
             sqlDataReader.Dispose();
             sqlCommandAsync.Dispose();
+
+            sqlDataReader = null;
+            sqlCommandAsync = null;
+
             base.Dispose(disposing);
         }
 

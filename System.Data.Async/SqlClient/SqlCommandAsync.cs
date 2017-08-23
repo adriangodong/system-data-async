@@ -121,6 +121,10 @@ namespace System.Data.Async.SqlClient
         {
             sqlCommand.Dispose();
             sqlConnectionAsync.Dispose();
+
+            sqlCommand = null;
+            sqlConnectionAsync = null;
+
             base.Dispose(disposing);
         }
 
