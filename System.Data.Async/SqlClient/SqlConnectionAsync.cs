@@ -7,7 +7,7 @@ namespace System.Data.Async.SqlClient
     public class SqlConnectionAsync : DbConnectionAsync
     {
 
-        internal readonly SqlConnection sqlConnection;
+        internal SqlConnection sqlConnection;
 
         public SqlConnectionAsync()
             : this(new SqlConnection())

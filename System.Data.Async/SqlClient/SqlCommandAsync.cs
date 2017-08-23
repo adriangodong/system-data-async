@@ -7,8 +7,8 @@ namespace System.Data.Async.SqlClient
     public class SqlCommandAsync : DbCommandAsync
     {
 
-        internal readonly SqlCommand sqlCommand;
-        internal readonly SqlConnectionAsync sqlConnectionAsync;
+        internal SqlCommand sqlCommand;
+        internal SqlConnectionAsync sqlConnectionAsync;
 
         public SqlCommandAsync()
             : this(new SqlCommand(), null)
