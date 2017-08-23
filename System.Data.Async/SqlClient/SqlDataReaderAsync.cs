@@ -9,8 +9,8 @@ namespace System.Data.Async.SqlClient
     public class SqlDataReaderAsync : DbDataReaderAsync
     {
 
-        private readonly SqlDataReader sqlDataReader;
-        private readonly SqlCommandAsync sqlCommandAsync;
+        internal readonly SqlDataReader sqlDataReader;
+        internal readonly SqlCommandAsync sqlCommandAsync;
 
         public SqlDataReaderAsync(SqlDataReader sqlDataReader, SqlCommandAsync sqlCommandAsync)
         {
