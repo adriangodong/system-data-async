@@ -7,8 +7,8 @@ namespace System.Data.Async.SqlClient
     public class SqlCommandAsync : DbCommandAsync
     {
 
-        private SqlCommand SqlCommand { get; }
-        private SqlConnectionAsync SqlConnectionAsync { get; }
+        private readonly SqlCommand sqlCommand;
+        private readonly SqlConnectionAsync sqlConnectionAsync;
 
         public SqlCommandAsync()
             : this(new SqlCommand(), null)
@@ -21,107 +21,107 @@ namespace System.Data.Async.SqlClient
         }
 
         public SqlCommandAsync(string cmdText, SqlConnectionAsync connection)
-            : this(new SqlCommand(cmdText, connection.SqlConnection), connection)
+            : this(new SqlCommand(cmdText, connection.sqlConnection), connection)
         {
         }
 
         public SqlCommandAsync(string cmdText, SqlConnectionAsync connection, SqlTransaction transaction)
-            : this(new SqlCommand(cmdText, connection.SqlConnection, transaction), connection)
+            : this(new SqlCommand(cmdText, connection.sqlConnection, transaction), connection)
         {
         }
 
         public SqlCommandAsync(SqlCommand sqlCommand, SqlConnectionAsync sqlConnectionAsync)
         {
-            SqlCommand = sqlCommand;
-            SqlConnectionAsync = sqlConnectionAsync;
+            this.sqlCommand = sqlCommand;
+            this.sqlConnectionAsync = sqlConnectionAsync;
         }
 
         protected override DbDataReaderAsync ExecuteDbDataReaderAsync(CommandBehavior behavior)
         {
-            var dataReader = SqlCommand.ExecuteReader(behavior);
+            var dataReader = sqlCommand.ExecuteReader(behavior);
 
             return new SqlDataReaderAsync(dataReader, this);
         }
 
         public override void Cancel()
         {
-            SqlCommand.Cancel();
+            sqlCommand.Cancel();
         }
 
         public override int ExecuteNonQuery()
         {
-            return SqlCommand.ExecuteNonQuery();
+            return sqlCommand.ExecuteNonQuery();
         }
 
         public override object ExecuteScalar()
         {
-            return SqlCommand.ExecuteScalar();
+            return sqlCommand.ExecuteScalar();
         }
 
         public override void Prepare()
         {
-            SqlCommand.Prepare();
+            sqlCommand.Prepare();
         }
 
         public override string CommandText
         {
-            get => SqlCommand.CommandText;
-            set => SqlCommand.CommandText = value;
+            get => sqlCommand.CommandText;
+            set => sqlCommand.CommandText = value;
         }
 
         public override int CommandTimeout
         {
-            get => SqlCommand.CommandTimeout;
-            set => SqlCommand.CommandTimeout = value;
+            get => sqlCommand.CommandTimeout;
+            set => sqlCommand.CommandTimeout = value;
         }
 
         public override CommandType CommandType
         {
-            get => SqlCommand.CommandType;
-            set => SqlCommand.CommandType = value;
+            get => sqlCommand.CommandType;
+            set => sqlCommand.CommandType = value;
         }
 
         public override UpdateRowSource UpdatedRowSource
         {
-            get => SqlCommand.UpdatedRowSource;
-            set => SqlCommand.UpdatedRowSource = value;
+            get => sqlCommand.UpdatedRowSource;
+            set => sqlCommand.UpdatedRowSource = value;
         }
 
         protected override DbConnection DbConnection
         {
-            get => SqlCommand.Connection;
-            set => SqlCommand.Connection = (SqlConnection)value;
+            get => sqlCommand.Connection;
+            set => sqlCommand.Connection = (SqlConnection)value;
         }
 
-        protected override DbParameterCollection DbParameterCollection => SqlCommand.Parameters;
+        protected override DbParameterCollection DbParameterCollection => sqlCommand.Parameters;
 
         protected override DbTransaction DbTransaction
         {
-            get => SqlCommand.Transaction;
-            set => SqlCommand.Transaction = (SqlTransaction)value;
+            get => sqlCommand.Transaction;
+            set => sqlCommand.Transaction = (SqlTransaction)value;
         }
 
         public override bool DesignTimeVisible
         {
-            get => SqlCommand.DesignTimeVisible;
-            set => SqlCommand.DesignTimeVisible = value;
+            get => sqlCommand.DesignTimeVisible;
+            set => sqlCommand.DesignTimeVisible = value;
         }
 
         protected override DbParameter CreateDbParameter()
         {
-            return SqlCommand.CreateParameter();
+            return sqlCommand.CreateParameter();
         }
 
         protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior)
         {
-            return SqlCommand.ExecuteReader(behavior);
+            return sqlCommand.ExecuteReader(behavior);
         }
 
         protected override void Dispose(bool disposing)
         {
-            SqlCommand.Dispose();
+            sqlCommand.Dispose();
+            sqlConnectionAsync.Dispose();
             base.Dispose(disposing);
-            SqlConnectionAsync.Dispose();
         }
 
     }

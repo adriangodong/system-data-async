@@ -9,159 +9,159 @@ namespace System.Data.Async.SqlClient
     public class SqlDataReaderAsync : DbDataReaderAsync
     {
 
-        private SqlDataReader SqlDataReader { get; }
-        private SqlCommandAsync SqlCommandAsync { get; }
+        private readonly SqlDataReader sqlDataReader;
+        private readonly SqlCommandAsync sqlCommandAsync;
 
         public SqlDataReaderAsync(SqlDataReader sqlDataReader, SqlCommandAsync sqlCommandAsync)
         {
-            SqlDataReader = sqlDataReader;
-            SqlCommandAsync = sqlCommandAsync;
+            this.sqlDataReader = sqlDataReader;
+            this.sqlCommandAsync = sqlCommandAsync;
         }
 
         public override bool GetBoolean(int ordinal)
         {
-            return SqlDataReader.GetBoolean(ordinal);
+            return sqlDataReader.GetBoolean(ordinal);
         }
 
         public override byte GetByte(int ordinal)
         {
-            return SqlDataReader.GetByte(ordinal);
+            return sqlDataReader.GetByte(ordinal);
         }
 
         public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
         {
-            return SqlDataReader.GetBytes(ordinal, dataOffset, buffer, bufferOffset, length);
+            return sqlDataReader.GetBytes(ordinal, dataOffset, buffer, bufferOffset, length);
         }
 
         public override char GetChar(int ordinal)
         {
-            return SqlDataReader.GetChar(ordinal);
+            return sqlDataReader.GetChar(ordinal);
         }
 
         public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
         {
-            return SqlDataReader.GetChars(ordinal, dataOffset, buffer, bufferOffset, length);
+            return sqlDataReader.GetChars(ordinal, dataOffset, buffer, bufferOffset, length);
         }
 
         public override string GetDataTypeName(int ordinal)
         {
-            return SqlDataReader.GetDataTypeName(ordinal);
+            return sqlDataReader.GetDataTypeName(ordinal);
         }
 
         public override DateTime GetDateTime(int ordinal)
         {
-            return SqlDataReader.GetDateTime(ordinal);
+            return sqlDataReader.GetDateTime(ordinal);
         }
 
         public override decimal GetDecimal(int ordinal)
         {
-            return SqlDataReader.GetDecimal(ordinal);
+            return sqlDataReader.GetDecimal(ordinal);
         }
 
         public override double GetDouble(int ordinal)
         {
-            return SqlDataReader.GetDouble(ordinal);
+            return sqlDataReader.GetDouble(ordinal);
         }
 
         public override Type GetFieldType(int ordinal)
         {
-            return SqlDataReader.GetFieldType(ordinal);
+            return sqlDataReader.GetFieldType(ordinal);
         }
 
         public override float GetFloat(int ordinal)
         {
-            return SqlDataReader.GetFloat(ordinal);
+            return sqlDataReader.GetFloat(ordinal);
         }
 
         public override Guid GetGuid(int ordinal)
         {
-            return SqlDataReader.GetGuid(ordinal);
+            return sqlDataReader.GetGuid(ordinal);
         }
 
         public override short GetInt16(int ordinal)
         {
-            return SqlDataReader.GetInt16(ordinal);
+            return sqlDataReader.GetInt16(ordinal);
         }
 
         public override int GetInt32(int ordinal)
         {
-            return SqlDataReader.GetInt32(ordinal);
+            return sqlDataReader.GetInt32(ordinal);
         }
 
         public override long GetInt64(int ordinal)
         {
-            return SqlDataReader.GetInt64(ordinal);
+            return sqlDataReader.GetInt64(ordinal);
         }
 
         public override string GetName(int ordinal)
         {
-            return SqlDataReader.GetName(ordinal);
+            return sqlDataReader.GetName(ordinal);
         }
 
         public override int GetOrdinal(string name)
         {
-            return SqlDataReader.GetOrdinal(name);
+            return sqlDataReader.GetOrdinal(name);
         }
 
         public override string GetString(int ordinal)
         {
-            return SqlDataReader.GetString(ordinal);
+            return sqlDataReader.GetString(ordinal);
         }
 
         public override object GetValue(int ordinal)
         {
-            return SqlDataReader.GetValue(ordinal);
+            return sqlDataReader.GetValue(ordinal);
         }
 
         public override int GetValues(object[] values)
         {
-            return SqlDataReader.GetValues(values);
+            return sqlDataReader.GetValues(values);
         }
 
         public override bool IsDBNull(int ordinal)
         {
-            return SqlDataReader.IsDBNull(ordinal);
+            return sqlDataReader.IsDBNull(ordinal);
         }
 
-        public override int FieldCount => SqlDataReader.FieldCount;
+        public override int FieldCount => sqlDataReader.FieldCount;
 
-        public override object this[int ordinal] => SqlDataReader[ordinal];
+        public override object this[int ordinal] => sqlDataReader[ordinal];
 
-        public override object this[string name] => SqlDataReader[name];
+        public override object this[string name] => sqlDataReader[name];
 
-        public override int RecordsAffected => SqlDataReader.RecordsAffected;
+        public override int RecordsAffected => sqlDataReader.RecordsAffected;
 
-        public override bool HasRows => SqlDataReader.HasRows;
+        public override bool HasRows => sqlDataReader.HasRows;
 
-        public override bool IsClosed => SqlDataReader.IsClosed;
+        public override bool IsClosed => sqlDataReader.IsClosed;
 
         public override bool NextResult()
         {
-            return SqlDataReader.NextResult();
+            return sqlDataReader.NextResult();
         }
 
         public override bool Read()
         {
-            return SqlDataReader.Read();
+            return sqlDataReader.Read();
         }
 
         public override Task<bool> ReadAsync(CancellationToken cancellationToken)
         {
-            return SqlDataReader.ReadAsync(cancellationToken);
+            return sqlDataReader.ReadAsync(cancellationToken);
         }
 
-        public override int Depth => SqlDataReader.Depth;
+        public override int Depth => sqlDataReader.Depth;
 
         public override IEnumerator GetEnumerator()
         {
-            return SqlDataReader.GetEnumerator();
+            return sqlDataReader.GetEnumerator();
         }
 
         protected override void Dispose(bool disposing)
         {
-            SqlDataReader.Dispose();
+            sqlDataReader.Dispose();
+            sqlCommandAsync.Dispose();
             base.Dispose(disposing);
-            SqlCommandAsync.Dispose();
         }
 
     }
