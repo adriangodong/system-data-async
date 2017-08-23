@@ -29,6 +29,46 @@ namespace LocalDb
         }
 
         [TestMethod]
+        public async Task SqlCommandAsync_Dispose_ShouldCloseConnectionAndNullify()
+        {
+            // Arrange
+            var connection = GetConnection();
+            var command = connection.CreateCommand();
+
+            var innerConnection = ((SqlConnectionAsync)connection).sqlConnection;
+
+            await connection.OpenAsync();
+
+            // Act
+            command.Dispose();
+
+            // Assert
+            Assert.AreEqual(ConnectionState.Closed, innerConnection.State);
+            Assert.IsNull(((SqlCommandAsync)command).sqlCommand);
+            Assert.IsNull(((SqlCommandAsync)command).sqlConnectionAsync);
+        }
+
+        [TestMethod]
+        public async Task SqlDataReaderAsync_Dispose_ShouldCloseConnectionAndNullify()
+        {
+            // Arrange
+            var connection = GetConnection();
+            var command = connection.CreateCommand();
+            command.CommandText = "select * from msdb.dbo.MSdbms_datatype_mapping";
+            command.CommandType = CommandType.Text;
+
+            await connection.OpenAsync();
+            var reader = await command.ExecuteReaderAsync();
+
+            // Act
+            reader.Dispose();
+
+            // Assert
+            Assert.IsNull(((SqlDataReaderAsync)reader).sqlDataReader);
+            Assert.IsNull(((SqlDataReaderAsync)reader).sqlCommandAsync);
+        }
+
+        [TestMethod]
         public async Task Using_ExecuteReaderAsync_CommandBehavior_CloseConnection_LeakTest()
         {
             for (var i = 0; i < 1000; i++)
