@@ -159,11 +159,17 @@ namespace System.Data.Async.SqlClient
 
         protected override void Dispose(bool disposing)
         {
-            sqlDataReader.Dispose();
-            sqlCommandAsync.Dispose();
+            if (sqlDataReader != null)
+            {
+                sqlDataReader.Dispose();
+                sqlDataReader = null;
+            }
 
-            sqlDataReader = null;
-            sqlCommandAsync = null;
+            if (sqlCommandAsync != null)
+            {
+                sqlCommandAsync.Dispose();
+                sqlCommandAsync = null;
+            }
 
             base.Dispose(disposing);
         }

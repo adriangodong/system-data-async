@@ -119,11 +119,17 @@ namespace System.Data.Async.SqlClient
 
         protected override void Dispose(bool disposing)
         {
-            sqlCommand.Dispose();
-            sqlConnectionAsync.Dispose();
+            if (sqlCommand != null)
+            {
+                sqlCommand.Dispose();
+                sqlCommand = null;
+            }
 
-            sqlCommand = null;
-            sqlConnectionAsync = null;
+            if (sqlConnectionAsync != null)
+            {
+                sqlConnectionAsync.Dispose();
+                sqlConnectionAsync = null;
+            }
 
             base.Dispose(disposing);
         }
