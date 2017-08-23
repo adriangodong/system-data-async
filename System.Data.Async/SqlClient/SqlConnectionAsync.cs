@@ -7,7 +7,7 @@ namespace System.Data.Async.SqlClient
     public class SqlConnectionAsync : DbConnectionAsync
     {
 
-        public SqlConnection SqlConnection { get; }
+        internal SqlConnection sqlConnection;
 
         public SqlConnectionAsync()
             : this(new SqlConnection())
@@ -21,19 +21,19 @@ namespace System.Data.Async.SqlClient
 
         public SqlConnectionAsync(SqlConnection sqlConnection)
         {
-            SqlConnection = sqlConnection;
+            this.sqlConnection = sqlConnection;
         }
 
         protected override DbCommandAsync CreateDbCommandAsync()
         {
-            var command = SqlConnection.CreateCommand();
+            var command = sqlConnection.CreateCommand();
             var asyncCommand = new SqlCommandAsync(command, this);
             return asyncCommand;
         }
 
         protected override DbTransaction BeginDbTransaction(IsolationLevel isolationLevel)
         {
-            DbTransaction transaction = SqlConnection.BeginTransaction(isolationLevel);
+            DbTransaction transaction = sqlConnection.BeginTransaction(isolationLevel);
 
             //   InnerConnection doesn't maintain a ref on the outer connection (this) and 
             //   subsequently leaves open the possibility that the outer connection could be GC'ed before the SqlTransaction
@@ -46,36 +46,36 @@ namespace System.Data.Async.SqlClient
 
         public override void ChangeDatabase(string databaseName)
         {
-            SqlConnection.ChangeDatabase(databaseName);
+            sqlConnection.ChangeDatabase(databaseName);
         }
 
         public override void Close()
         {
-            SqlConnection.Close();
+            sqlConnection.Close();
         }
 
         public override void Open()
         {
-            SqlConnection.Open();
+            sqlConnection.Open();
         }
 
         public override string ConnectionString
         {
-            get => SqlConnection.ConnectionString;
-            set => SqlConnection.ConnectionString = value;
+            get => sqlConnection.ConnectionString;
+            set => sqlConnection.ConnectionString = value;
         }
 
-        public override string Database => SqlConnection.Database;
+        public override string Database => sqlConnection.Database;
 
-        public override ConnectionState State => SqlConnection.State;
+        public override ConnectionState State => sqlConnection.State;
 
-        public override string DataSource => SqlConnection.DataSource;
+        public override string DataSource => sqlConnection.DataSource;
 
-        public override string ServerVersion => SqlConnection.ServerVersion;
+        public override string ServerVersion => sqlConnection.ServerVersion;
 
         protected override void Dispose(bool disposing)
         {
-            SqlConnection.Dispose();
+            sqlConnection.Dispose();
             base.Dispose(disposing);
         }
 
