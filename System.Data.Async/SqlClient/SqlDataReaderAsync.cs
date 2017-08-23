@@ -9,8 +9,8 @@ namespace System.Data.Async.SqlClient
     public class SqlDataReaderAsync : DbDataReaderAsync
     {
 
-        private readonly SqlDataReader sqlDataReader;
-        private readonly SqlCommandAsync sqlCommandAsync;
+        internal SqlDataReader sqlDataReader;
+        internal SqlCommandAsync sqlCommandAsync;
 
         public SqlDataReaderAsync(SqlDataReader sqlDataReader, SqlCommandAsync sqlCommandAsync)
         {
@@ -159,8 +159,18 @@ namespace System.Data.Async.SqlClient
 
         protected override void Dispose(bool disposing)
         {
-            sqlDataReader.Dispose();
-            sqlCommandAsync.Dispose();
+            if (sqlDataReader != null)
+            {
+                sqlDataReader.Dispose();
+                sqlDataReader = null;
+            }
+
+            if (sqlCommandAsync != null)
+            {
+                sqlCommandAsync.Dispose();
+                sqlCommandAsync = null;
+            }
+
             base.Dispose(disposing);
         }
 

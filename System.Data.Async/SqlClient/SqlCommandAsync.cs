@@ -7,8 +7,8 @@ namespace System.Data.Async.SqlClient
     public class SqlCommandAsync : DbCommandAsync
     {
 
-        private readonly SqlCommand sqlCommand;
-        private readonly SqlConnectionAsync sqlConnectionAsync;
+        internal SqlCommand sqlCommand;
+        internal SqlConnectionAsync sqlConnectionAsync;
 
         public SqlCommandAsync()
             : this(new SqlCommand(), null)
@@ -119,8 +119,18 @@ namespace System.Data.Async.SqlClient
 
         protected override void Dispose(bool disposing)
         {
-            sqlCommand.Dispose();
-            sqlConnectionAsync.Dispose();
+            if (sqlCommand != null)
+            {
+                sqlCommand.Dispose();
+                sqlCommand = null;
+            }
+
+            if (sqlConnectionAsync != null)
+            {
+                sqlConnectionAsync.Dispose();
+                sqlConnectionAsync = null;
+            }
+
             base.Dispose(disposing);
         }
 
