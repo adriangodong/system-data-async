@@ -14,7 +14,8 @@
     <PackageId>System.Data.Async</PackageId>
     <IncludeSymbols>True</IncludeSymbols>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>1.0.5</Version>
+    <Version>0.0.0</Version>
+    <PackageVersion>0.0.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
