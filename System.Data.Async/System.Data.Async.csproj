@@ -15,7 +15,6 @@
     <IncludeSymbols>True</IncludeSymbols>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Version>0.0.0</Version>
-    <PackageVersion>0.0.0</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
