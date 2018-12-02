@@ -1,6 +1,6 @@
 This library adds interfaces and adapters to allow working with async methods available in System.Data abstract classes but not interfaces.
 
-Sample migration:
+## Sample migration
 
 ```diff
 - // With System.Data.Common
@@ -22,3 +22,5 @@ public void GetCommand()
     CreateCommand(connection);
 }
 ```
+
+## [Changelog](CHANGELOG.md)
