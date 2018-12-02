@@ -123,6 +123,11 @@ namespace System.Data.Async.SqlClient
             return sqlDataReader.IsDBNull(ordinal);
         }
 
+        public override DataTable GetSchemaTable()
+        {
+            return sqlDataReader.GetSchemaTable();
+        }
+
         public override int FieldCount => sqlDataReader.FieldCount;
 
         public override object this[int ordinal] => sqlDataReader[ordinal];
