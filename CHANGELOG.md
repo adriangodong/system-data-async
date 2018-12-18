@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Implemented override for `IDataReader.GetSchemaTable()`. [#14](https://github.com/adriangodong/system-data-async/pull/14)
+- Implemented more overrides missing from `SqlDataReader`. [#16](https://github.com/adriangodong/system-data-async/pull/16)
 
 ### Changed
 
