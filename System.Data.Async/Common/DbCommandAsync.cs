@@ -4,62 +4,85 @@ using System.Threading.Tasks;
 
 namespace System.Data.Async.Common
 {
-    public abstract class DbCommandAsync : DbCommand, IDbCommandAsync
+    public abstract class DbCommandAsync : IDbCommandAsync, IDisposable
     {
-        public new IDataReaderAsync ExecuteReader() => ExecuteDbDataReaderAsync(CommandBehavior.Default);
-        public new IDataReaderAsync ExecuteReader(CommandBehavior behavior) => ExecuteDbDataReaderAsync(behavior);
-        protected override DbDataReader ExecuteDbDataReader(CommandBehavior behavior) => ExecuteDbDataReaderAsync(behavior);
-        protected abstract DbDataReaderAsync ExecuteDbDataReaderAsync(CommandBehavior behavior);
 
-        public new async Task<IDataReaderAsync> ExecuteReaderAsync() => await ExecuteDbDataReaderAsyncAsync(CommandBehavior.Default, CancellationToken.None);
-        public new async Task<IDataReaderAsync> ExecuteReaderAsync(CancellationToken cancellationToken) => await ExecuteDbDataReaderAsyncAsync(CommandBehavior.Default, cancellationToken);
-        public new async Task<IDataReaderAsync> ExecuteReaderAsync(CommandBehavior behavior) => await ExecuteDbDataReaderAsyncAsync(behavior, CancellationToken.None);
-        public new async Task<IDataReaderAsync> ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) => await ExecuteDbDataReaderAsyncAsync(behavior, cancellationToken);
-        protected override async Task<DbDataReader> ExecuteDbDataReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken) => await ExecuteDbDataReaderAsyncAsync(behavior, cancellationToken);
+        private readonly DbCommand dbCommand;
 
-        protected virtual Task<DbDataReaderAsync> ExecuteDbDataReaderAsyncAsync(CommandBehavior behavior, CancellationToken cancellationToken)
+        public DbCommandAsync(DbCommand dbCommand)
         {
-            if (cancellationToken.IsCancellationRequested)
-            {
-                return Task.FromCanceled<DbDataReaderAsync>(new CancellationToken(true));
-            }
-            else
-            {
-                CancellationTokenRegistration registration = new CancellationTokenRegistration();
-                if (cancellationToken.CanBeCanceled)
-                {
-                    registration = cancellationToken.Register(s => ((DbCommandAsync)s).CancelIgnoreFailure(), this);
-                }
-
-                try
-                {
-                    return Task.FromResult<DbDataReaderAsync>(ExecuteDbDataReaderAsync(behavior));
-                }
-                catch (Exception e)
-                {
-                    return Task.FromException<DbDataReaderAsync>(e);
-                }
-                finally
-                {
-                    registration.Dispose();
-                }
-            }
+            this.dbCommand = dbCommand;
         }
 
-        internal void CancelIgnoreFailure()
+        #region Public Properties
+
+        public abstract string CommandText { get; set; }
+        public abstract int CommandTimeout { get; set; }
+        public abstract CommandType CommandType { get; set; }
+
+        IDbConnection IDbCommand.Connection
         {
-            // This method is used to route CancellationTokens to the Cancel method.
-            // Cancellation is a suggestion, and exceptions should be ignored
-            // rather than allowed to be unhandled, as the exceptions cannot be 
-            // routed to the caller. These errors will be observed in the regular 
-            // method instead.
-            try
-            {
-                Cancel();
-            }
-            catch (Exception)
-            {
-            }
+            get => Connection;
+            set => Connection = (DbConnection)value;
         }
+
+        public DbConnection Connection
+        {
+            get => dbCommand.Connection;
+            set => dbCommand.Connection = value;
+        }
+
+        IDataParameterCollection IDbCommand.Parameters
+        {
+            get => Parameters;
+        }
+
+        public DbParameterCollection Parameters
+        {
+            get => dbCommand.Parameters;
+        }
+
+        IDbTransaction IDbCommand.Transaction
+        {
+            get => Transaction;
+            set => Transaction = (DbTransaction)value;
+        }
+
+        public DbTransaction Transaction
+        {
+            get => dbCommand.Transaction;
+            set => dbCommand.Transaction = value;
+        }
+
+        public abstract UpdateRowSource UpdatedRowSource { get; set; }
+        public abstract bool DesignTimeVisible { get; set; }
+
+        #endregion
+
+        #region Public Methods
+
+        public abstract void Cancel();
+        public IDbDataParameter CreateParameter() => dbCommand.CreateParameter();
+        public abstract int ExecuteNonQuery();
+        public abstract IDataReader ExecuteReader();
+        public abstract IDataReader ExecuteReader(CommandBehavior behavior);
+        public abstract object ExecuteScalar();
+        public abstract void Prepare();
+        public Task<int> ExecuteNonQueryAsync() => dbCommand.ExecuteNonQueryAsync();
+        public virtual Task<int> ExecuteNonQueryAsync(CancellationToken cancellationToken) => dbCommand.ExecuteNonQueryAsync(cancellationToken);
+        public abstract Task<IDbDataReaderAsync> ExecuteReaderAsync(CommandBehavior behavior, CancellationToken cancellationToken);
+        public abstract Task<IDbDataReaderAsync> ExecuteReaderAsync(CommandBehavior behavior);
+        public abstract Task<IDbDataReaderAsync> ExecuteReaderAsync();
+        public abstract Task<IDbDataReaderAsync> ExecuteReaderAsync(CancellationToken cancellationToken);
+        public Task<object> ExecuteScalarAsync() => dbCommand.ExecuteScalarAsync();
+        public virtual Task<object> ExecuteScalarAsync(CancellationToken cancellationToken) => dbCommand.ExecuteScalarAsync(cancellationToken);
+
+        #endregion
+
+        public void Dispose()
+        {
+            dbCommand.Dispose();
+        }
+
     }
 }

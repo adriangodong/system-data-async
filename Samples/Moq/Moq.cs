@@ -1,4 +1,5 @@
-﻿using System.Data.Async;
+﻿using System.Data;
+using System.Data.Async;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -67,20 +68,20 @@ namespace Moq
         }
 
         [TestMethod]
-        public async Task CreateCommand_ExecuteReader_ReadAsync()
+        public void CreateCommand_ExecuteReader_Read()
         {
             // Arrange
             var mockConnection = new Mock<IDbConnectionAsync>();
             var mockCommand = new Mock<IDbCommandAsync>();
-            var mockDataReader = new Mock<IDataReaderAsync>();
+            var mockDataReader = new Mock<IDataReader>();
             mockConnection.Setup(mock => mock.CreateCommand()).Returns(mockCommand.Object);
             mockCommand.Setup(mock => mock.ExecuteReader()).Returns(mockDataReader.Object);
 
             // Act
-            await mockConnection.Object.CreateCommand().ExecuteReader().ReadAsync();
+            mockConnection.Object.CreateCommand().ExecuteReader().Read();
 
             // Assert
-            mockDataReader.Verify(mock => mock.ReadAsync(), Times.Once);
+            mockDataReader.Verify(mock => mock.Read(), Times.Once);
         }
 
         [TestMethod]
