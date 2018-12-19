@@ -90,7 +90,7 @@ namespace Moq
             // Arrange
             var mockConnection = new Mock<IDbConnectionAsync>();
             var mockCommand = new Mock<IDbCommandAsync>();
-            var mockDataReader = new Mock<IDataReaderAsync>();
+            var mockDataReader = new Mock<IDbDataReaderAsync>();
             mockConnection.Setup(mock => mock.CreateCommand()).Returns(mockCommand.Object);
             mockCommand.Setup(mock => mock.ExecuteReaderAsync()).ReturnsAsync(mockDataReader.Object);
 

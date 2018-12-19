@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Async;
 using System.Data.Async.SqlClient;
@@ -12,7 +11,7 @@ namespace LocalDb
     public class LeakTests
     {
 
-        private IDbConnectionAsync GetConnection()
+        private ISqlConnectionAsync GetConnection()
         {
             return new SqlConnectionAsync("Server=(localdb)\\MSSQLLocalDB;Integrated Security=true;");
         }
@@ -29,13 +28,11 @@ namespace LocalDb
         }
 
         [TestMethod]
-        public async Task SqlCommandAsync_Dispose_ShouldCloseConnectionAndNullify()
+        public async Task SqlCommandAsync_Dispose_ShouldNotCloseConnection()
         {
             // Arrange
             var connection = GetConnection();
             var command = connection.CreateCommand();
-
-            var innerConnection = ((SqlConnectionAsync)connection).sqlConnection;
 
             await connection.OpenAsync();
 
@@ -43,13 +40,11 @@ namespace LocalDb
             command.Dispose();
 
             // Assert
-            Assert.AreEqual(ConnectionState.Closed, innerConnection.State);
-            Assert.IsNull(((SqlCommandAsync)command).sqlCommand);
-            Assert.IsNull(((SqlCommandAsync)command).sqlConnectionAsync);
+            Assert.AreEqual(ConnectionState.Open, connection.State);
         }
 
         [TestMethod]
-        public async Task SqlDataReaderAsync_Dispose_ShouldCloseConnectionAndNullify()
+        public async Task SqlDataReaderAsync_Dispose_ShouldNotCloseConnection()
         {
             // Arrange
             var connection = GetConnection();
@@ -64,8 +59,26 @@ namespace LocalDb
             reader.Dispose();
 
             // Assert
-            Assert.IsNull(((SqlDataReaderAsync)reader).sqlDataReader);
-            Assert.IsNull(((SqlDataReaderAsync)reader).sqlCommandAsync);
+            Assert.AreEqual(ConnectionState.Open, connection.State);
+        }
+
+        [TestMethod]
+        public async Task SqlDataReaderAsync_CommandBehavior_CloseConnection_Dispose_ShouldCloseConnection()
+        {
+            // Arrange
+            var connection = GetConnection();
+            var command = connection.CreateCommand();
+            command.CommandText = "select * from msdb.dbo.MSdbms_datatype_mapping";
+            command.CommandType = CommandType.Text;
+
+            await connection.OpenAsync();
+            var reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
+
+            // Act
+            reader.Dispose();
+
+            // Assert
+            Assert.AreEqual(ConnectionState.Closed, connection.State);
         }
 
         [TestMethod]
@@ -92,46 +105,29 @@ namespace LocalDb
         }
 
         [TestMethod]
-        public async Task Using_ExecuteReaderAsync_WithGcCollect_LeakTest()
-        {
-            var connection = GetConnection();
-            var command = connection.CreateCommand();
-            command.CommandText = "select * from msdb.dbo.MSdbms_datatype_mapping";
-            command.CommandType = CommandType.Text;
-
-            await connection.OpenAsync();
-
-            var mappings = new List<DbmsDatatypeMapping>();
-            using (var reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection))
-            {
-                while (await reader.ReadAsync())
-                {
-                    GC.Collect();
-                    mappings.Add(Read(reader));
-                }
-            }
-        }
-
-        [TestMethod]
         public async Task Using_ExecuteReaderAsync_LeakTest()
         {
             for (var i = 0; i < 1000; i++)
             {
-                var connection = GetConnection();
-                var command = connection.CreateCommand();
-                command.CommandText = "select * from msdb.dbo.MSdbms_datatype_mapping";
-                command.CommandType = CommandType.Text;
-
-                await connection.OpenAsync();
-
-                var mappings = new List<DbmsDatatypeMapping>();
-                using (var reader = await command.ExecuteReaderAsync())
+                using (var connection = GetConnection())
                 {
-                    while (await reader.ReadAsync())
+                    using (var command = connection.CreateCommand())
                     {
-                        while (await reader.ReadAsync())
+                        command.CommandText = "select * from msdb.dbo.MSdbms_datatype_mapping";
+                        command.CommandType = CommandType.Text;
+
+                        await connection.OpenAsync();
+
+                        var mappings = new List<DbmsDatatypeMapping>();
+                        using (var reader = await command.ExecuteReaderAsync())
                         {
-                            mappings.Add(Read(reader));
+                            while (await reader.ReadAsync())
+                            {
+                                while (await reader.ReadAsync())
+                                {
+                                    mappings.Add(Read(reader));
+                                }
+                            }
                         }
                     }
                 }
@@ -161,29 +157,6 @@ namespace LocalDb
         }
 
         [TestMethod]
-        public async Task Dispose_ExecuteReaderAsync_WithGcCollect_LeakTest()
-        {
-            var connection = GetConnection();
-            var command = connection.CreateCommand();
-            command.CommandText = "select * from msdb.dbo.MSdbms_datatype_mapping";
-            command.CommandType = CommandType.Text;
-
-            await connection.OpenAsync();
-
-            var mappings = new List<DbmsDatatypeMapping>();
-            var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                while (await reader.ReadAsync())
-                {
-                    GC.Collect();
-                    mappings.Add(Read(reader));
-                }
-            }
-            reader.Dispose();
-        }
-
-        [TestMethod]
         public async Task Dispose_ExecuteReaderAsync_LeakTest()
         {
             for (var i = 0; i < 1000; i++)
@@ -205,6 +178,8 @@ namespace LocalDb
                     }
                 }
                 reader.Dispose();
+                command.Dispose();
+                connection.Dispose();
             }
         }
 
