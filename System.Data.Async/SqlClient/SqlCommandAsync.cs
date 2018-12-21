@@ -36,6 +36,12 @@ namespace System.Data.Async.SqlClient
         public SqlCommandAsync(SqlCommand sqlCommand) : base(sqlCommand)
         {
             this.sqlCommand = sqlCommand;
+            sqlCommand.StatementCompleted += SqlCommand_StatementCompleted;
+        }
+
+        private void SqlCommand_StatementCompleted(object sender, StatementCompletedEventArgs e)
+        {
+            StatementCompleted?.Invoke(sender, e);
         }
 
         #region Public Properties
@@ -157,6 +163,7 @@ namespace System.Data.Async.SqlClient
 
         public new void Dispose()
         {
+            StatementCompleted -= SqlCommand_StatementCompleted;
             sqlCommand.Dispose();
             base.Dispose();
         }

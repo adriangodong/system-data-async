@@ -13,6 +13,12 @@ namespace System.Data.Async.Common
         public DbConnectionAsync(DbConnection dbConnection)
         {
             this.dbConnection = dbConnection;
+            dbConnection.StateChange += DbConnection_StateChange;
+        }
+
+        private void DbConnection_StateChange(object sender, StateChangeEventArgs e)
+        {
+            StateChange?.Invoke(sender, e);
         }
 
         #region Public Properties
@@ -54,6 +60,7 @@ namespace System.Data.Async.Common
 
         public void Dispose()
         {
+            StateChange -= DbConnection_StateChange;
             dbConnection.Dispose();
         }
 

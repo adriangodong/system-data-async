@@ -29,6 +29,12 @@ namespace System.Data.Async.SqlClient
         public SqlConnectionAsync(SqlConnection sqlConnection) : base(sqlConnection)
         {
             this.sqlConnection = sqlConnection;
+            sqlConnection.InfoMessage += SqlConnection_InfoMessage;
+        }
+
+        private void SqlConnection_InfoMessage(object sender, SqlInfoMessageEventArgs e)
+        {
+            InfoMessage?.Invoke(sender, e);
         }
 
         #region Public Properties
@@ -130,6 +136,7 @@ namespace System.Data.Async.SqlClient
 
         public new void Dispose()
         {
+            InfoMessage -= SqlConnection_InfoMessage;
             sqlConnection.Dispose();
             base.Dispose();
         }
