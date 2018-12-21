@@ -4,7 +4,7 @@ This library adds interfaces and adapters to allow working with async methods av
 
 **Latest Release**
 
-[![Release](https://img.shields.io/nuget/v/MediumSdk.svg)](https://www.nuget.org/packages/MediumSdk/)
+[![Release](https://img.shields.io/nuget/v/System.Data.Async.svg)](https://www.nuget.org/packages/System.Data.Async/)
 
 **Latest master Build**
 
