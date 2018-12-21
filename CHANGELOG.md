@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2018-12-21
+
 ### Added
 
 - Added new interfaces: `S.D.A.IDataRecordAsync` (extends `IDataRecord`), `S.D.A.IDbDataReaderAsync`, `S.D.A.SqlClient.ISqlConnectionAsync`, `S.D.A.SqlClient.ISqlCommandAsync`, `S.D.A.SqlClient.ISqlDataReaderAsync`. [#18](https://github.com/adriangodong/system-data-async/pull/18)
